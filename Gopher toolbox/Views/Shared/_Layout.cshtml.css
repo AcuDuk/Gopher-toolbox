@@ -46,3 +46,33 @@ button.accept-policy {
   white-space: nowrap;
   line-height: 60px;
 }
+
+
+@media (prefers-color-scheme: light) {
+    body {
+        background-color: #f0f0f0;
+        color: black;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #252424;
+        color: white;
+    }
+}
+
+
+::-webkit-scrollbar {
+    width: 10px;
+    background-color: none;
+}
+
+::-webkit-scrollbar-track {
+    background-color: none;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #e4d9d9;
+    border-radius: 25px;
+}

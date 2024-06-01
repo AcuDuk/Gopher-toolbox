@@ -1,4 +1,5 @@
 using Gopher_toolbox.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -19,6 +20,17 @@ namespace Gopher_toolbox.Controllers
         }
 
         public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public IActionResult Admin()
+        {
+            return View();
+        }
+        [Authorize]
+        public IActionResult UserEvents()
         {
             return View();
         }

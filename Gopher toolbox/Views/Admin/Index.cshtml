@@ -1,0 +1,36 @@
+﻿<h2>Admin Panel</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td>
+                    <form asp-action="BlockUser" method="post">
+                        <input type="hidden" name="userId" value="@user.Id" />
+                        <button type="submit" class="btn btn-danger">Block</button>
+                    </form>
+                    <form asp-action="ChangePassword" method="post">
+                        <input type="hidden" name="userId" value="@user.Id" />
+                        <input type="password" name="newPassword" placeholder="New Password" />
+                        <button type="submit" class="btn btn-warning">Change Password</button>
+                    </form>
+                    <form asp-action="AddToDepartment" method="post">
+                        <input type="hidden" name="userId" value="@user.Id" />
+                        <input type="text" name="department" placeholder="Department" />
+                        <button type="submit" class="btn btn-success">Add to Department</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

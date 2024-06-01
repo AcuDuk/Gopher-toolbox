@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gopher_toolbox.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240530141816_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240603165051_Gopher-toolbox")]
+    partial class Gophertoolbox
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

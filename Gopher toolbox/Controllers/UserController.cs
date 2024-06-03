@@ -1,60 +1,39 @@
-﻿using ExampleLoginEmptyProject.Data;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using System.Collections.Generic;
-using Gopher_toolbox.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Threading.Tasks;
+using GopherToolboxNew.Data; 
+using GopherToolboxNew.Models; 
+using GopherToolboxNew.ViewModels; 
 
-namespace Gopher_toolbox.Services
+namespace GopherToolboxNew.Controllers
 {
-    public interface IUserService
-    {
-        //List<ApplicationUser> GetAllUsers();
-        void BlockUser(string userId);
-        void ChangePassword(string userId, string newPassword);
-        void AddToDepartment(string userId, string department);
-    }
-
-    public class UserService : IUserService
+    [Authorize]
+    public class UserController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public UserService(ApplicationDbContext context)
+        public UserController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
-       /* public List<ApplicationUser> GetAllUsers()
+        public async Task<IActionResult> Index()
         {
-            return _context.Users.ToList();
-        }*/
-
-        public void BlockUser(string userId)
-        {
-            var user = _context.Users.Find(userId);
-            if (user != null)
+            var user = await _userManager.GetUserAsync(User);
+            var duties = await _context.Duties
+                                       .Where(d => d.UserId == user.Id)
+                                       .Include(d => d.Department)
+                                       .ToListAsync();
+            var viewModel = new UserCalendarViewModel
             {
-                user.LockoutEnd = DateTimeOffset.MaxValue;
-                _context.SaveChanges();
-            }
-        }
-
-        public void ChangePassword(string userId, string newPassword)
-        {
-            var user = _context.Users.Find(userId);
-            if (user != null)
-            {
-                //user.PasswordHash = new PasswordHasher<ApplicationUser>().HashPassword(user, newPassword);
-                _context.SaveChanges();
-            }
-        }
-
-        public void AddToDepartment(string userId, string department)
-        {
-            var user = _context.Users.Find(userId);
-            if (user != null)
-            {
-                //user.Department = department;
-                _context.SaveChanges();
-            }
+                Duties = duties
+            };
+            return View(viewModel);
         }
     }
 }

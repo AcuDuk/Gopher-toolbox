@@ -1,47 +1,48 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using GopherToolboxNew.Data;
+using GopherToolboxNew.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using Gopher_toolbox.Models;
-using Gopher_toolbox.Services;
+using System.Threading.Tasks;
+using GopherToolboxNew.Models;
 
-namespace Gopher_toolbox.Controllers
+namespace GopherToolboxNew.Controllers
 {
-    [Authorize/*(Roles = "Administrator")*/]
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
-        private readonly IUserService _userService;
+        private readonly ApplicationDbContext _context;
 
-        public AdminController(IUserService userService)
+        public AdminController(ApplicationDbContext context)
         {
-            _userService = userService;
+            _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            //var users = _userService.GetAllUsers();
-            return View(/*users*/);
-        }
-
-        [HttpPost]
-        public IActionResult BlockUser(string userId)
-        {
-            _userService.BlockUser(userId);
-            return RedirectToAction("Index");
-        }
-
-        [HttpPost]
-        public IActionResult ChangePassword(string userId, string newPassword)
-        {
-            _userService.ChangePassword(userId, newPassword);
-            return RedirectToAction("Index");
+            var departments = await _context.Departments.ToListAsync();
+            var duties = await _context.Duties.Include(d => d.User).Include(d => d.Department).ToListAsync();
+            var viewModel = new AdminCalendarViewModel
+            {
+                Departments = departments,
+                Duties = duties
+            };
+            return View(viewModel);
         }
 
         [HttpPost]
-        public IActionResult AddToDepartment(string userId, string department)
+        public async Task<IActionResult> CreateDuty(AdminCalendarViewModel viewModel)
         {
-            _userService.AddToDepartment(userId, department);
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                _context.Duties.Add(viewModel.NewDuty);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            viewModel.Departments = await _context.Departments.ToListAsync();
+            viewModel.Duties = await _context.Duties.Include(d => d.User).Include(d => d.Department).ToListAsync();
+            return View("Index", viewModel);
         }
     }
 }

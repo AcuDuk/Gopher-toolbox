@@ -1,4 +1,4 @@
-namespace Gopher_toolbox.Models
+namespace GopherToolboxNew.Models
 {
     public class ErrorViewModel
     {

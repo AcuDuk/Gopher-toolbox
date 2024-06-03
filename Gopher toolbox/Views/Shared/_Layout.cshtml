@@ -25,15 +25,11 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="AdminMgmt">Zarządzaj panelami</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">Zarządzaj Dyżurami</a>
                             </li>
                             <li class="nav-item">
-                                <a class ="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="UserPanels">Moje panele</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">Moje Dyżury</a>
                             </li>
-                        }
-                        else
-                        {
-                            
                         }
                     </ul>
                     <partial name="_LoginPartial" />

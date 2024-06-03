@@ -1,9 +1,9 @@
-using Gopher_toolbox.Models;
+using GopherToolboxNew.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace Gopher_toolbox.Controllers
+namespace GopherToolboxNew.Controllers
 {
     public class HomeController : Controller
     {

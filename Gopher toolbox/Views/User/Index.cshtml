@@ -1,0 +1,27 @@
+﻿@model GopherToolboxNew.ViewModels.UserCalendarViewModel
+
+@{
+    ViewData["Title"] = "Moje dyżury";
+}
+
+<h1>Moje dyżury</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Description</th>
+            <th>Duty Date</th>
+            <th>Department</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var duty in Model.Duties)
+        {
+            <tr>
+                <td>@duty.Description</td>
+                <td>@duty.DutyDate.ToShortDateString()</td>
+                <td>@duty.Department.Name</td>
+            </tr>
+        }
+    </tbody>
+</table>

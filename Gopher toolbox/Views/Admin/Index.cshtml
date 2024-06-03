@@ -1,35 +1,49 @@
-﻿<h2>Admin Panel</h2>
+﻿@model GopherToolboxNew.ViewModels.AdminCalendarViewModel
 
+@{
+    ViewData["Title"] = "Zarządzanie dyżurami";
+}
+
+<h1>Admin Calendar</h1>
+
+<form asp-action="CreateDuty" method="post">
+    <div>
+        <label for="department">Department:</label>
+        <select asp-for="NewDuty.DepartmentId" asp-items="@(new SelectList(Model.Departments, "Id", "Name"))"></select>
+    </div>
+    <div>
+        <label for="description">Description:</label>
+        <input asp-for="NewDuty.Description" class="form-control" />
+    </div>
+    <div>
+        <label for="dutyDate">Duty Date:</label>
+        <input type="date" asp-for="NewDuty.DutyDate" class="form-control" />
+    </div>
+    <div>
+        <label for="user">User Email:</label>
+        <input asp-for="NewDuty.UserId" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Add Duty</button>
+</form>
+
+<h2>Existing Duties</h2>
 <table class="table">
     <thead>
         <tr>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Actions</th>
+            <th>Description</th>
+            <th>Duty Date</th>
+            <th>User</th>
+            <th>Department</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var user in Model)
+        @foreach (var duty in Model.Duties)
         {
             <tr>
-                <td>@user.UserName</td>
-                <td>@user.Email</td>
-                <td>
-                    <form asp-action="BlockUser" method="post">
-                        <input type="hidden" name="userId" value="@user.Id" />
-                        <button type="submit" class="btn btn-danger">Block</button>
-                    </form>
-                    <form asp-action="ChangePassword" method="post">
-                        <input type="hidden" name="userId" value="@user.Id" />
-                        <input type="password" name="newPassword" placeholder="New Password" />
-                        <button type="submit" class="btn btn-warning">Change Password</button>
-                    </form>
-                    <form asp-action="AddToDepartment" method="post">
-                        <input type="hidden" name="userId" value="@user.Id" />
-                        <input type="text" name="department" placeholder="Department" />
-                        <button type="submit" class="btn btn-success">Add to Department</button>
-                    </form>
-                </td>
+                <td>@duty.Description</td>
+                <td>@duty.DutyDate.ToShortDateString()</td>
+                <td>@duty.User?.Email</td> 
+                <td>@duty.Department?.Name</td> 
             </tr>
         }
     </tbody>
